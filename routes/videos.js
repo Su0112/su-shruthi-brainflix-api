@@ -12,7 +12,7 @@ router.use(express.json());
 router.get("/", (req, res) => {
   //console.log(req.user);
   try {
-    res.json(data);
+    res.status(200).json(data);
   } catch (error) {
     console.log("Error retrieving the videos", error);
   }
@@ -25,14 +25,33 @@ router.get("/:id", (req, res) => {
     return v.id === id;
   });
   if (video) {
-    res.json(video);
+    res.status(200).json(video);
   } else {
-    res.json({ error: `Video with ID ${re.params.id} not found` });
+    res.status(404).json({ error: `Video with ID ${req.params.id} not found` });
   }
 });
 
 router.post("/", (req, res) => {
-  res.send("Video Post");
+  console.log(req.body);
+  const { title, description } = req.body;
+  if (!title || !description) {
+    return res.status(400).json({
+      error: "Please provide title & description for adding the video",
+    });
+  }
+
+  const newVideo = {
+    id: getNewId(),
+    title,
+    description,
+    image: imageFile,
+    channel: "channel",
+  };
+
+  students.push(newVideo);
+  writeJSONFile(videosJSONFile, videos);
+
+  res.status(201).json(newVideo);
 });
 
 module.exports = router;
