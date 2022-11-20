@@ -33,7 +33,17 @@ router.get("/:id", (req, res) => {
 
 router.post("/", (req, res) => {
   console.log(req.body);
-  const { title, description } = req.body;
+  const {
+    title,
+    description,
+    image,
+    channel,
+    views,
+    likes,
+    duration,
+    timestamp,
+    comments,
+  } = req.body;
   if (!title || !description) {
     return res.status(400).json({
       error: "Please provide title & description for adding the video",
@@ -44,12 +54,17 @@ router.post("/", (req, res) => {
     id: getNewId(),
     title,
     description,
-    image: imageFile,
-    channel: "channel",
+    image,
+    channel,
+    views,
+    likes,
+    duration,
+    timestamp,
+    comments,
   };
 
-  students.push(newVideo);
-  writeJSONFile(videosJSONFile, videos);
+  data.push(newVideo);
+  writeJSONFile(videosJSONFile, data);
 
   res.status(201).json(newVideo);
 });
